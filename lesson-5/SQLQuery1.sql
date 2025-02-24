@@ -29,4 +29,42 @@ select product_name from sales where year(date_sold)=2020 group by product_name 
 
 --window functions
 use class5;
-CREATE TABLE Sales (    SaleID INT IDENTITY(1,1) PRIMARY KEY,    SaleDate DATE NOT NULL,    Amount DECIMAL(10,2) NOT NULL);INSERT INTO Sales (SaleDate, Amount) VALUES('2024-01-01', 100),('2024-01-02', 200),('2024-01-03', 150),('2024-01-04', 300),('2024-01-05', 250),('2024-01-06', 400),('2024-01-07', 350),('2024-01-08', 450),('2024-01-09', 500),('2024-01-10', 100);select * from Sales;--order requiredselect *, row_number() over(order by amount asc) as rn_asc,row_number() over(order by amount desc) as rn_descfrom salesorder by saleID;select *, dense_rank() over (order by amount) as rn_samefrom sales order by saleID;select *, rank() over(order by amount) as rn_un from sales order by saleid;select *, (select sum(amount)  from sales) from sales;select *, sum(amount) over() as summ from sales;select * from sales;select *, cast(amount/sum(amount) over() *100 as dec(10,2))from salesselect *, avg(amount) over(order by saledate rows between 1 preceding and 1 following) as percentage from sales; 
+CREATE TABLE Sales (
+    SaleID INT IDENTITY(1,1) PRIMARY KEY,
+    SaleDate DATE NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL
+);
+
+INSERT INTO Sales (SaleDate, Amount) VALUES
+('2024-01-01', 100),
+('2024-01-02', 200),
+('2024-01-03', 150),
+('2024-01-04', 300),
+('2024-01-05', 250),
+('2024-01-06', 400),
+('2024-01-07', 350),
+('2024-01-08', 450),
+('2024-01-09', 500),
+('2024-01-10', 100);
+select * from Sales;
+--order required
+select *, row_number() over(order by amount asc) as rn_asc,
+row_number() over(order by amount desc) as rn_desc
+from sales
+order by saleID;
+
+select *, dense_rank() over (order by amount) as rn_same
+from sales order by saleID;
+
+select *, rank() over(order by amount) as rn_un from sales order by saleid;
+
+select *, (select sum(amount)  from sales) from sales;
+
+select *, sum(amount) over() as summ from sales;
+
+select * from sales;
+
+select *, cast(amount/sum(amount) over() *100 as dec(10,2))
+from sales
+
+select *, avg(amount) over(order by saledate rows between 1 preceding and 1 following) as percentage from sales; 
