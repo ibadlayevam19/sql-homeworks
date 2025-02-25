@@ -54,6 +54,6 @@ select sum(salary) from (select * from Employees order by HireDate desc offset 0
 --task11
 select *, cast(avg(salary) over(order by EmployeeID) as dec(10,2)) as running_avg from Employees;
 --task12
-select *, max(salary) over(order by EmployeeID rows between 2 preceding and 2 following) as maximumof5 from Employees;
+select *, max(salary) over(order by EmployeeID rows between 2 preceding and 2 following) as maximum from Employees;
 --task13
 select*, cast(salary/sum(salary) over(partition by department) as dec(10,2)) as portion_to_department from Employees;
