@@ -51,7 +51,7 @@ VALUES
     (11, 'Kelly', '1997-06-09'),
 	(12, 'Leo', '2025-01-01'); 
 select * from Employees_N;
-select concat(year(hire_date)-diff+1, '-', year(hire_date)-1) from(
-select *, isnull(year(Hire_date)-year(lag(hire_date) over(order by hire_date)), 0) as diff from employees_N) t1 where diff>1 and year(hire_date)-diff+1>1974;
+select concat(year(hire_date)-diff+1, '-', year(hire_date)-1) as Years from(
+select *, isnull(year(Hire_date)-year(lag(hire_date) over(order by hire_date)), 0) as diff from employees_N) t1 where diff>1 and year(hire_date)-diff+1>1974 and hire_date<(getdate()+1);
 
 
