@@ -22,7 +22,8 @@ values
 select * from groupings;
 
 
-select min([step number]) as [Min Step Number], max([step number]) as [Max Step Number], Status, count(*) as [Consecutive Count] from (
+select min([step number]) as [Min Step Number], max([step number]) as [Max Step Number], Status, count(*) as [Consecutive Count] 
+from (
 select *, sum(num) over(order by [step number] rows between unbounded preceding and 0 following) 
 as groups 
 from (select *, (case when status=lag(status) over (order by [step number]) then 0 else 1 end) 
