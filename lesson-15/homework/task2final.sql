@@ -134,3 +134,30 @@ select
 (select sum([quantity change]) from #visual where days between 181 and 270) as [181-270 days old],
 (select sum([quantity change]) from #visual where days between 271 and 360) as [271-360 days old],
 (select sum([quantity change]) from #visual where days between 361 and 450) as [361-450 days old];
+
+--select max(days)/90+1 from #visual;
+
+
+select * from #visual;
+declare @num int=0
+declare @finalsql nvarchar(max)='select'
+while @num<(select max(days)/90+1 from #visual)
+begin
+if (select sum([quantity change]) from #visual where days between 90*@num+1 and 90*(@num+1)) is null
+begin
+set @num=@num+1
+continue
+end
+else
+set @finalsql=@finalsql+'(select sum([quantity change]) from #visual where days between '+cast(@num*90+1 as nvarchar(max))+' and '+cast((@num+1)*90 as nvarchar(max))+') 
+as ['+cast(@num*90+1 as nvarchar(max))+'-'+cast((@num+1)*90 as nvarchar(max))+' days old],'
+set @num=@num+1;
+end
+set @finalsql= (select left(@finalsql, len(@finalsql)-1)+';' where right(@finalsql, 1)=',')
+
+exec sp_executesql @finalsql;
+
+--to check
+/*insert into #visual
+values
+(12, 542);*/
